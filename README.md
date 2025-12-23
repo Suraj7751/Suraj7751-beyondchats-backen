@@ -1,90 +1,142 @@
 # BeyondChats Backend Assignment
 
 ## Overview
-This project is a backend automation system built using **Laravel** and **Node.js**.
 
-The system scrapes blog articles, enhances content using an LLM (Gemini with fallback), and republishes optimized articles back into the Laravel backend using REST APIs.
+This project is a full-stack backend automation system built using Laravel, Node.js, and React.
 
----
+The system:
 
-## Tech Stack
-- Laravel 11 (Backend API)
-- SQLite (Database)
-- Node.js (Automation Service)
-- Axios & Cheerio (Web scraping)
-- Google Gemini API (LLM with fallback handling)
+Scrapes blog articles
 
----
+Enhances content using an LLM (Google Gemini with fallback)
 
-## Project Structure
+Stores and republishes optimized articles via a Laravel REST API
 
+Displays articles in a React frontend
+
+The architecture is designed to be fault-tolerant, scalable, and production-safe.
+
+🧱 Tech Stack
+
+Laravel 12 – Backend REST API
+
+SQLite – Database
+
+Node.js – Automation & orchestration service
+
+Axios – HTTP client
+
+Cheerio – Web scraping
+
+Google Gemini API – LLM-based content enhancement (with fallback)
+
+React (Vite) – Frontend UI
+
+📂 Project Structure
 beyondchats-backend/
 │
 ├── app/
-│ ├── Models/Article.php
-│ ├── Http/Controllers/ArticleController.php
+│   ├── Models/
+│   │   └── Article.php
+│   └── Http/
+│       └── Controllers/
+│           └── ArticleController.php
 │
 ├── database/
-│ └── migrations/
+│   └── migrations/
 │
 ├── phase-2-node/
-│ ├── index.js
-│ ├── package.json
-│ └── .env
+│   ├── index.js
+│   ├── package.json
+│   └── .env
+│
+├── phase-3-frontend/
+│   ├── src/
+│   │   └── App.jsx
+│   ├── .env
+│   └── package.json
 │
 ├── routes/
-│ └── api.php
+│   └── api.php
 │
 └── README.md
 
+🟢 Phase 1: Laravel Backend
+Features
 
----
+RESTful APIs for article management
 
-## Phase 1: Laravel Backend
+Automatic unique slug generation at model level
 
-### Features
-- REST APIs for managing articles
-- Automatic slug generation at model level
-- Validation and error handling
-- SQLite database support
+Request validation and error handling
 
-### API Endpoints
+SQLite database support
 
-| Method | Endpoint | Description |
-|------|---------|------------|
-| GET | /api/articles | Fetch all articles |
-| POST | /api/articles | Create a new article |
-| PUT | /api/articles/{id} | Update an article |
-| DELETE | /api/articles/{id} | Delete an article |
-
-### Run Laravel
-```bash
+API Endpoints
+Method	Endpoint	Description
+GET	/api/articles	Fetch all articles
+POST	/api/articles	Create a new article
+PUT	/api/articles/{id}	Update an article
+DELETE	/api/articles/{id}	Delete an article
+Run Backend
 php artisan migrate
 php artisan serve
 
 
-Phase 2: Node.js Automation
-What it does
+Backend runs at:
+
+http://127.0.0.1:8000
+
+🔵 Phase 2: Node.js Automation
+What Phase 2 Does
 
 Fetches the latest article from Laravel API
 
 Searches related articles using DuckDuckGo
 
-Scrapes reference content
+Cleans and decodes redirect URLs
 
-Enhances the article using Gemini LLM
+Scrapes reference article content
 
-Uses fallback logic if LLM is unavailable
+Enhances content using Google Gemini LLM
+
+Falls back to safe rewrite if LLM is unavailable
 
 Publishes the updated article back to Laravel
 
+This ensures the pipeline never breaks, even if external services fail.
 
-Run Phase 2 Automation
+Run Phase 2
 cd phase-2-node
 npm install
 node index.js
 
-Environment Variables
+Sample Output
+Generating updated article using LLM...
+⚠️ Gemini unavailable, using fallback rewrite
+✅ Updated article published successfully!
+
+🟣 Phase 3: React Frontend (Optional)
+
+A simple React UI built with Vite that:
+
+Fetches articles from Laravel API
+
+Displays original and AI-enhanced articles
+
+Provides a clean, readable interface
+
+Run Frontend
+cd phase-3-frontend
+npm install
+npm run dev
+
+
+Frontend runs at:
+
+http://localhost:5173
+
+🔐 Environment Variables
 Laravel .env
 DB_CONNECTION=sqlite
 
@@ -92,30 +144,41 @@ Node.js .env
 LARAVEL_API=http://127.0.0.1:8000/api/articles
 GEMINI_API_KEY=your_api_key_here
 
-Sample Output
-Latest article: 10 Solutions for Common Customer Service Issues
-Generating updated article using LLM...
-⚠️ Gemini unavailable, using fallback rewrite
-✅ Updated article published successfully!
+React .env
+VITE_API_URL=http://127.0.0.1:8000/api/articles
 
-Design Decisions
+🧠 Design Decisions
 
-Slug generation is handled in the Laravel model, not the client
+Slug generation handled in Laravel model, not client
 
 Node.js focuses only on automation and orchestration
 
-Validation is enforced at the backend API layer
+Backend owns validation and data integrity
 
-LLM failures do not stop the pipeline
+LLM failures do not break the system
 
-Duplicate data issues are avoided through backend ownership
+Clear separation of concerns across layers
 
-Final Result
+✅ Final Outcome
 
-Original articles are stored in the database
+Original articles stored in database
 
-Enhanced “(Updated)” articles are auto-generated
+AI-enhanced “(Updated)” articles auto-generated
 
-References are appended to the final content
+References appended to final content
 
-System runs end-to-end without manual intervention
+Fully automated end-to-end pipeline
+
+Optional frontend for visualization
+
+👤 Author
+
+Suraj
+
+🏁 Status
+
+✔ Phase 1 – Backend API
+✔ Phase 2 – Automation + AI
+✔ Phase 3 – Frontend UI (Optional)
+
+Assignment completed successfully.
